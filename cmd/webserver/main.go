@@ -3,7 +3,7 @@ package main
 import (
 	"log/slog"
 
-	"github.com/wiliamvj/api-users-golang/config/logger"
+	"github.com/andersoncarubelli/api-golang-postgresql-docker/config/logger"
 )
 
 type user struct {
