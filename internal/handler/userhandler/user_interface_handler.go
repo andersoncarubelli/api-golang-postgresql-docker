@@ -17,5 +17,5 @@ type handler struct {
 }
 
 type UserHandler interface {
-	CreateUser(w http.ResponseWriter, r *http.Request) error
+	CreateUser(w http.ResponseWriter, r *http.Request)
 }
