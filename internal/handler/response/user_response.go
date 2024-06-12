@@ -10,6 +10,6 @@ type UserResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type ManyUsersReponse struct {
+type ManyUsersResponse struct {
 	Users []UserResponse `json:"users"`
 }

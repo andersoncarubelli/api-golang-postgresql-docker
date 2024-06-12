@@ -13,6 +13,18 @@ import (
 	"github.com/google/uuid"
 )
 
+// Create user
+//
+//	@Summary		Create new user
+//	@Description	Endpoint for create user
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		dto.CreateUserDto	true	"Create user dto"	true
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/user [get]
 func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateUserDto
 
@@ -51,6 +63,18 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Create user
+//
+//	@Summary		Create new user
+//	@Description	Endpoint for create user
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		dto.CreateUserDto	true	"Create user dto"	true
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/user [get]
 func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var req dto.UpdateUserDto
 
@@ -107,6 +131,20 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// User details
+//
+//	@Summary		User details
+//	@Description	Get user by id
+//	@Tags			user
+//	@Security		ApiKeyAuth
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	string	true	"user id"
+//	@Success		200 {object} response.UserResponse
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		404	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/user/{id} [get]
 func (h *handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
@@ -138,9 +176,22 @@ func (h *handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(res)
-
 }
 
+// Delete user
+//
+//	@Summary		Delete user
+//	@Description	delete user by id
+//	@Tags			user
+//	@Security		ApiKeyAuth
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	string	true	"user id"
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		404	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/user/{id} [delete]
 func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -173,6 +224,19 @@ func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// Get many user
+//
+//	@Summary		Get many users
+//	@Description	Get many users
+//	@Tags			user
+//	@Security		ApiKeyAuth
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	response.ManyUsersResponse
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		404	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/user [get]
 func (h *handler) FindManyUsers(w http.ResponseWriter, r *http.Request) {
 	res, err := h.service.FindManyUsers(r.Context())
 	if err != nil {
@@ -188,6 +252,20 @@ func (h *handler) FindManyUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
+// Update user password
+//
+//	@Summary		Update user password
+//	@Description	Endpoint for Update user password
+//	@Tags			user
+//	@Security		ApiKeyAuth
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path	string						true	"user id"
+//	@Param			body	body	dto.UpdateUserPasswordDto	true	"Update user password dto"	true
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/user/password/{id} [get]
 func (h *handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
 	var req dto.UpdateUserPasswordDto
 
@@ -242,5 +320,4 @@ func (h *handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(msg)
 		return
 	}
-
 }

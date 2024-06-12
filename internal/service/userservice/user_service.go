@@ -33,8 +33,8 @@ func (s *service) GetUserByID(ctx context.Context, id string) (*response.UserRes
 	return &userFake, nil
 }
 
-func (s *service) FindManyUsers(ctx context.Context) (response.ManyUsersReponse, error) {
-	usersFake := response.ManyUsersReponse{}
+func (s *service) FindManyUsers(ctx context.Context) (response.ManyUsersResponse, error) {
+	usersFake := response.ManyUsersResponse{}
 
 	for i := 0; i < 5; i++ {
 		userFake := response.UserResponse{

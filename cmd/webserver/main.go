@@ -42,6 +42,7 @@ func main() {
 
 	// init routes
 	routes.InitUserRoutes(router, newUserHandler)
+	routes.InitDocsRoutes(router)
 
 	port := fmt.Sprintf(":%s", env.Env.GoPort)
 	slog.Info(fmt.Sprintf("server running on port %s", port))
