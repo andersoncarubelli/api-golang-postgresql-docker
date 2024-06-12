@@ -44,11 +44,12 @@ func NewUnauthorizedRequestError(message string) *RestErr {
 	}
 }
 
-func NewBadRequestValidationError(message string) *RestErr {
+func NewBadRequestValidationError(message string, c []Fields) *RestErr {
 	return &RestErr{
-		Message: m,
+		Message: message,
 		Err:     "bad_request",
 		Code:    http.StatusBadRequest,
+		Fields:  c,
 	}
 }
 
