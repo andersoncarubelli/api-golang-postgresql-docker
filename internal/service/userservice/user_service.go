@@ -6,11 +6,11 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/andersoncarubelli/api-golang-postgresql-docker/api/viacep"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/dto"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/entity"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/handler/response"
 	"github.com/google/uuid"
+	"github.com/wiliamvj/api-users-golang/api/viacep"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -48,9 +48,9 @@ func (s *service) CreateUser(ctx context.Context, u dto.CreateUserDto) error {
 			CEP:        cep.CEP,
 			IBGE:       cep.IBGE,
 			UF:         cep.UF,
-			City:       cep.City,
-			Complement: cep.Complement,
-			Street:     cep.Street,
+			City:       cep.Localidade,
+			Complement: cep.Complemento,
+			Street:     cep.Logradouro,
 		},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -104,9 +104,9 @@ func (s *service) UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string
 			CEP:        cep.CEP,
 			IBGE:       cep.IBGE,
 			UF:         cep.UF,
-			City:       cep.City,
-			Complement: cep.Complement,
-			Street:     cep.Street,
+			City:       cep.Localidade,
+			Complement: cep.Complemento,
+			Street:     cep.Logradouro,
 		}
 	}
 
