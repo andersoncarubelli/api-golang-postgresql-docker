@@ -10,6 +10,7 @@ import (
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/entity"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/handler/response"
 	"github.com/google/uuid"
+	"github.com/wiliamvj/api-users-golang/api/viacep"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -32,11 +33,25 @@ func (s *service) CreateUser(ctx context.Context, u dto.CreateUserDto) error {
 		return errors.New("error to encrypt password")
 	}
 
+	cep, err := viacep.GetCep(u.CEP)
+	if err != nil {
+		slog.Error("error to get cep", "err", err, slog.String("package", "userservice"))
+		return err
+	}
+
 	newUser := entity.UserEntity{
-		ID:        uuid.New().String(),
-		Name:      u.Name,
-		Email:     u.Email,
-		Password:  string(passwordEncrypted),
+		ID:       uuid.New().String(),
+		Name:     u.Name,
+		Email:    u.Email,
+		Password: string(passwordEncrypted),
+		Address: entity.UserAddress{
+			CEP:        cep.CEP,
+			IBGE:       cep.IBGE,
+			UF:         cep.UF,
+			City:       cep.City,
+			Complement: cep.Complement,
+			Street:     cep.Street,
+		},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -61,6 +76,8 @@ func (s *service) UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string
 		return errors.New("user not exists")
 	}
 
+	var updateUser entity.UserEntity
+
 	if u.Email != "" {
 		verifyUserEmail, err := s.repository.FindUserByEmail(ctx, u.Email)
 		if err != nil {
@@ -72,14 +89,30 @@ func (s *service) UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string
 			slog.Error("email already in use", slog.String("package", "userservice"))
 			return errors.New("email already in use")
 		}
+
+		updateUser.Email = u.Email
 	}
 
-	updateUser := entity.UserEntity{
-		ID:        id,
-		Name:      u.Name,
-		Email:     u.Email,
-		UpdatedAt: time.Now(),
+	if u.CEP != "" {
+		cep, err := viacep.GetCep(u.CEP)
+		if err != nil {
+			slog.Error("error to get cep", "err", err, slog.String("package", "userservice"))
+			return err
+		}
+
+		updateUser.Address = entity.UserAddress{
+			CEP:        cep.CEP,
+			IBGE:       cep.IBGE,
+			UF:         cep.UF,
+			City:       cep.City,
+			Complement: cep.Complement,
+			Street:     cep.Street,
+		}
 	}
+
+	updateUser.ID = id
+	updateUser.Name = u.Name
+	updateUser.UpdatedAt = time.Now()
 
 	err = s.repository.UpdateUser(ctx, &updateUser)
 	if err != nil {

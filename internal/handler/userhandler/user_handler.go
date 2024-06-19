@@ -56,6 +56,13 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	err = h.service.CreateUser(r.Context(), req)
 	if err != nil {
 		slog.Error(fmt.Sprintf("error to create user: %v", err), slog.String("package", "handler_user"))
+		if err.Error() == "cep not found" {
+			w.WriteHeader(http.StatusNotFound)
+			msg := httperr.NewNotFoundError("cep not found")
+			json.NewEncoder(w).Encode(msg)
+			return
+		}
+
 		w.WriteHeader(http.StatusInternalServerError)
 		msg := httperr.NewBadRequestError("error to create user")
 		json.NewEncoder(w).Encode(msg)
@@ -127,6 +134,13 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		if err.Error() == "user not found" {
 			w.WriteHeader(http.StatusNotFound)
 			msg := httperr.NewNotFoundError("user not found")
+			json.NewEncoder(w).Encode(msg)
+			return
+		}
+
+		if err.Error() == "cep not found" {
+			w.WriteHeader(http.StatusNotFound)
+			msg := httperr.NewNotFoundError("cep not found")
 			json.NewEncoder(w).Encode(msg)
 			return
 		}
