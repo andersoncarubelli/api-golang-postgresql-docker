@@ -113,7 +113,7 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		slog.Error("erro to decode body", "err", err, slog.String("package", "userhandler"))
+		slog.Error("error to decode body", "err", err, slog.String("package", "userhandler"))
 		w.WriteHeader(http.StatusBadRequest)
 		msg := httperr.NewBadRequestError("error to decode body")
 		json.NewEncoder(w).Encode(msg)

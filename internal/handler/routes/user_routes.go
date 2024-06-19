@@ -14,4 +14,7 @@ func InitUserRoutes(router chi.Router, h userhandler.UserHandler) {
 		r.Get("/", h.FindManyUsers)
 		r.Patch("/password/{id}", h.UpdateUserPassword)
 	})
+	router.Route("/auth", func(r chi.Router) {
+		r.Post("/login", h.Login)
+	})
 }
