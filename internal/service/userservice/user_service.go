@@ -6,11 +6,11 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/andersoncarubelli/api-golang-postgresql-docker/api/viacep"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/dto"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/entity"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/handler/response"
 	"github.com/google/uuid"
-	"github.com/wiliamvj/api-users-golang/api/viacep"
 	"golang.org/x/crypto/bcrypt"
 )
 
