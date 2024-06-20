@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/common/utils"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/dto"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/handler/httperr"
 	"github.com/andersoncarubelli/api-golang-postgresql-docker/internal/handler/validation"
@@ -153,39 +154,31 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // User details
-//
 //	@Summary		User details
 //	@Description	Get user by id
 //	@Tags			user
 //	@Security		ApiKeyAuth
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path	string	true	"user id"
-//	@Success		200 {object} response.UserResponse
+//	@Param			id	path		string	true	"user id"
+//	@Success		200	{object}	response.UserResponse
 //	@Failure		400	{object}	httperr.RestErr
 //	@Failure		404	{object}	httperr.RestErr
 //	@Failure		500	{object}	httperr.RestErr
-//	@Router			/user/{id} [get]
+//	@Router			/user [get]
+
 func (h *handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	if id == "" {
-		slog.Error("id is empty", slog.String("package", "userhandler"))
-		w.WriteHeader(http.StatusBadRequest)
-		msg := httperr.NewBadRequestError("id is required")
-		json.NewEncoder(w).Encode(msg)
-		return
-	}
+	user, err := utils.DecodeJwt(r)
 
-	_, err := uuid.Parse(id)
 	if err != nil {
-		slog.Error(fmt.Sprintf("errot to parse id: %v", err), slog.String("package", "userhandler"))
+		slog.Error("error to decode jwt", slog.String("package", "userhandler"))
 		w.WriteHeader(http.StatusBadRequest)
-		msg := httperr.NewBadRequestError("id ios required")
+		msg := httperr.NewBadRequestError("error to decode jwt")
 		json.NewEncoder(w).Encode(msg)
 		return
 	}
 
-	res, err := h.service.GetUserByID(r.Context(), id)
+	res, err := h.service.GetUserByID(r.Context(), user.ID)
 	if err != nil {
 		slog.Error(fmt.Sprintf("error to get user: %v", err), slog.String("package", "userhandler"))
 		if err.Error() == "user not found" {

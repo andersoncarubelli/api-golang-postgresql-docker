@@ -4,7 +4,9 @@ go 1.22.4
 
 require (
 	github.com/go-chi/chi v4.1.2+incompatible
+	github.com/go-chi/jwtauth v1.2.0
 	github.com/go-playground/validator/v10 v10.21.0
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.4.0
 	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.19.0
@@ -19,7 +21,6 @@ require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
-	github.com/go-chi/jwtauth v1.2.0 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/spec v0.21.0 // indirect
