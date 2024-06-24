@@ -182,6 +182,45 @@ func (q *Queries) FindUserByEmail(ctx context.Context, email string) (FindUserBy
 	return i, err
 }
 
+const findUserByID = `-- name: FindUserByID :one
+SELECT u.id, u.name, u.email, u.created_at, u.updated_at, a.cep, a.uf, a.city, a.complement, a.street
+FROM users u
+    JOIN address a ON a.user_id = u.id
+WHERE
+    u.id = $1
+`
+
+type FindUserByIDRow struct {
+	ID         string
+	Name       string
+	Email      string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	Cep        string
+	Uf         string
+	City       string
+	Complement sql.NullString
+	Street     string
+}
+
+func (q *Queries) FindUserByID(ctx context.Context, id string) (FindUserByIDRow, error) {
+	row := q.db.QueryRowContext(ctx, findUserByID, id)
+	var i FindUserByIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Cep,
+		&i.Uf,
+		&i.City,
+		&i.Complement,
+		&i.Street,
+	)
+	return i, err
+}
+
 const getUserByID = `-- name: GetUserByID :one
 SELECT id, name, email, password, created_at, updated_at from users u where u.id = $1
 `
