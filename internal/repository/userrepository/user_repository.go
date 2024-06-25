@@ -98,7 +98,7 @@ func (r *repository) UpdateUser(ctx context.Context, u *entity.UserEntity) error
 
 		var err error
 
-		err := q.UpdateUser(ctx, sqlc.UpdateUserParams{
+		err = q.UpdateUser(ctx, sqlc.UpdateUserParams{
 			ID:        u.ID,
 			Name:      sql.NullString{String: u.Name, Valid: u.Name != ""},
 			Email:     sql.NullString{String: u.Email, Valid: u.Email != ""},
