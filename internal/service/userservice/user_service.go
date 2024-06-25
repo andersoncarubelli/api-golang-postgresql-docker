@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"log/slog"
 	"time"
@@ -18,8 +19,10 @@ func (s *service) CreateUser(ctx context.Context, u dto.CreateUserDto) error {
 	userExists, err := s.repository.FindUserByEmail(ctx, u.Email)
 
 	if err != nil {
-		slog.Error("error to search user by email", "err", err, slog.String("package", "userservice"))
-		return err
+		if err != sql.ErrNoRows {
+			slog.Error("error to search user by email", "err", err, slog.String("package", "userservice"))
+			return err
+		}
 	}
 
 	if userExists != nil {
@@ -67,6 +70,10 @@ func (s *service) CreateUser(ctx context.Context, u dto.CreateUserDto) error {
 func (s *service) UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string) error {
 	userExists, err := s.repository.FindUserByID(ctx, id)
 	if err != nil {
+		if err != sql.ErrNoRows {
+			slog.Error("user not found", slog.String("package", "userservice"))
+			return errors.New("user not found")
+		}
 		slog.Error("error to search user by id", "err", err, slog.String("package", "userservice"))
 		return err
 	}
@@ -81,8 +88,10 @@ func (s *service) UpdateUser(ctx context.Context, u dto.UpdateUserDto, id string
 	if u.Email != "" {
 		verifyUserEmail, err := s.repository.FindUserByEmail(ctx, u.Email)
 		if err != nil {
-			slog.Error("error ro search user by email", "err", err, slog.String("package", "userservice"))
-			return err
+			if err != sql.ErrNoRows {
+				slog.Error("error to search user by email", "err", slog.String("package", "userservice"))
+				return errors.New("error to search user by email")
+			}
 		}
 
 		if verifyUserEmail != nil {
