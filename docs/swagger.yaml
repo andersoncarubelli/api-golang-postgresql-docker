@@ -63,8 +63,23 @@ definitions:
           $ref: '#/definitions/response.UserResponse'
         type: array
     type: object
+  response.UserAddress:
+    properties:
+      cep:
+        type: string
+      city:
+        type: string
+      complement:
+        type: string
+      street:
+        type: string
+      uf:
+        type: string
+    type: object
   response.UserResponse:
     properties:
+      address:
+        $ref: '#/definitions/response.UserAddress'
       created_at:
         type: string
       email:

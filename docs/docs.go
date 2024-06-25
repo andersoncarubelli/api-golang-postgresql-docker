@@ -261,9 +261,32 @@ const docTemplate = `{
                 }
             }
         },
+        "response.UserAddress": {
+            "type": "object",
+            "properties": {
+                "cep": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "complement": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "uf": {
+                    "type": "string"
+                }
+            }
+        },
         "response.UserResponse": {
             "type": "object",
             "properties": {
+                "address": {
+                    "$ref": "#/definitions/response.UserAddress"
+                },
                 "created_at": {
                     "type": "string"
                 },
