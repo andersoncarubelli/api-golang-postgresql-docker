@@ -211,13 +211,18 @@ func (s *service) UpdateUserPassword(ctx context.Context, u *dto.UpdateUserPassw
 		return errors.New("user not found")
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(userExists.Password), []byte(u.OldPassword))
+	oldPass, err := s.repository.GetUserPassword(ctx, id)
 	if err != nil {
-		slog.Error("invlid password", slog.String("package", "userservice"))
+		slog.Error("error to get user password", "err", err, slog.String("package", "userservice"))
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(oldPass), []byte(u.OldPassword))
+	if err != nil {
+		slog.Error("invalid password", slog.String("package", "userservice"))
 		return errors.New("invalid password")
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(userExists.Password), []byte(u.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(oldPass), []byte(u.Password))
 	if err != nil {
 		slog.Error("new passowrd is equal to old password", slog.String("package", "userservice"))
 		return errors.New("new passowrd is equal to old password")
